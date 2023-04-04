@@ -17,8 +17,6 @@
         android:textSize="32sp"
         android:textStyle="bold" />
 
-<<<<<<< Updated upstream
-=======
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasksRecyclerView"
         android:layout_width="match_parent"
@@ -37,5 +35,5 @@
         android:backgroundTint="@android:color/holo_blue_dark"
         android:src="@drawable/ic_baseline_add"
         app:tint="@android:color/white" />
->>>>>>> Stashed changes
+
 </RelativeLayout>
