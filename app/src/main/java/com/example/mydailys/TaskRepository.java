@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.mydailys.db.TaskDao;
+import com.example.mydailys.db.TaskDatabase;
+
 import java.util.List;
 
 public class TaskRepository {
