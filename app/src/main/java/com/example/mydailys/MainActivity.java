@@ -1,75 +1,74 @@
 package com.example.mydailys;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.icu.text.CaseMap;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
+import com.example.mydailys.model.Priority;
+import com.example.mydailys.model.Task;
+import com.example.mydailys.model.TaskViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.ref.Reference;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+
+import android.util.Log;
+
+import android.view.Menu;
+import android.view.MenuItem;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "ITEM";
     private TaskViewModel taskViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        FloatingActionButton buttonAddTask = findViewById(R.id.button_add_task);
+        taskViewModel = new ViewModelProvider.AndroidViewModelFactory(
+                MainActivity.this.getApplication())
+                .create(TaskViewModel.class);
 
-        ActivityResultLauncher<Intent> addTaskLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-                        String title = data.getStringExtra(AddTaskActivity.EXTRA_TITLE);
-                        String description = data.getStringExtra(AddTaskActivity.EXTRA_DESCRIPTION);
-                        int priority = data.getIntExtra(AddTaskActivity.EXTRA_PRIORITY, 1);
-
-                        Task task = new Task(title, description, priority);
-                        taskViewModel.insert(task);
-
-                        Toast.makeText(this, "Task saved", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Task not saved", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        buttonAddTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
-                addTaskLauncher.launch(intent);
+        taskViewModel.getAllTasks().observe(this, tasks -> {
+            for (Task task : tasks) {
+                Log.d(TAG, "onCreate: " + task.getTaskId());
             }
+
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(view -> {
+            Task task = new Task("Todo", Priority.HIGH, Calendar.getInstance().getTime(),
+                    Calendar.getInstance().getTime(), false);
 
-        TaskAdapter adapter = new TaskAdapter();
-        recyclerView.setAdapter(adapter);
+            TaskViewModel.insertTask(task);
 
-        taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        taskViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(List<Task> tasks) {
-                adapter.setTasks(tasks);
-            }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
