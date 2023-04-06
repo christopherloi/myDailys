@@ -25,8 +25,8 @@
 
     <ImageButton
         android:id="@+id/priority_todo_button"
-        android:layout_width="77dp"
-        android:layout_height="46dp"
+        android:layout_width="75dp"
+        android:layout_height="65dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
@@ -37,8 +37,8 @@
 
     <ImageButton
         android:id="@+id/save_todo_button"
-        android:layout_width="70dp"
-        android:layout_height="72dp"
+        android:layout_width="75dp"
+        android:layout_height="65dp"
         android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:scaleX="0.4"
@@ -52,8 +52,8 @@
 
     <ImageButton
         android:id="@+id/today_calendar_button"
-        android:layout_width="74dp"
-        android:layout_height="48dp"
+        android:layout_width="75dp"
+        android:layout_height="65dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@string/image_description"
         android:layout_marginTop="16dp"
@@ -64,8 +64,8 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/tomorrow_chip"
-        android:layout_width="269dp"
-        android:layout_height="41dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:text="@string/tomorrow"
         app:chipIcon="@drawable/ic_baseline_wb_sunny_24"
         app:layout_constraintEnd_toEndOf="@+id/next_week_chip"
@@ -75,8 +75,8 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/next_week_chip"
-        android:layout_width="272dp"
-        android:layout_height="41dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:background="@android:color/transparent"
         android:text="@string/next_week"
         app:chipIcon="@drawable/ic_baseline_next_week_24"
@@ -86,8 +86,8 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/today_chip"
-        android:layout_width="267dp"
-        android:layout_height="41dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:layout_marginTop="2dp"
         android:text="@string/today"
         app:chipIcon="@drawable/ic_baseline_today_24"
@@ -111,11 +111,11 @@
 
     <CalendarView
         android:id="@+id/calendar_view"
-        android:layout_width="318dp"
-        android:layout_height="296dp"
+        android:layout_width="320dp"
+        android:layout_height="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/next_week_chip"
         app:layout_constraintVertical_bias="0.16000003" />
