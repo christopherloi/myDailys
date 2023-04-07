@@ -63,6 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             this.onTodoClickListener = todoClickListener;
 
             itemView.setOnClickListener(this);
+            radioButton.setOnClickListener(this);
 
         }
 
@@ -72,6 +73,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (id == R.id.todo_row_layout) {
                 Task currTask = taskList.get(getBindingAdapterPosition());
                 onTodoClickListener.onTodoClick(getBindingAdapterPosition(), currTask);
+            }else if (id == R.id.todo_radio_button) {
+
             }
         }
     }

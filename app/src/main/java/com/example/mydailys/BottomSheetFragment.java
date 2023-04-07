@@ -78,8 +78,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
             calendar.clear();
             calendar.set(year, month, dayOfMonth);
             dueDate = calendar.getTime();
-
-            // Log.d("Cal", "onViewCreated: ===> month" + (month + 1) + ", dayOfMonth" + dayOfMonth);
         });
 
         saveButton.setOnClickListener(view1 -> {
@@ -91,7 +89,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
                 TaskViewModel.insertTask(myTask);
             }
-
         });
 
     }
