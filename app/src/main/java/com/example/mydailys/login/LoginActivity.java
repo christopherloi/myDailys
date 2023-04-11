@@ -16,6 +16,8 @@ import com.example.mydailys.MainActivity;
 import com.example.mydailys.R;
 import com.example.mydailys.util.Utils;
 
+import java.util.Map;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText username;
@@ -24,6 +26,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signup_text;
     private CheckBox remember_me;
     boolean isValid = false;
+
+    public User user;
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedPreferencesEditor;
@@ -39,14 +43,21 @@ public class LoginActivity extends AppCompatActivity {
         signup_text = findViewById(R.id.signup_text);
         remember_me = findViewById(R.id.remember_checkBox);
 
+        user = new User();
+
         sharedPreferences = getApplicationContext().getSharedPreferences("UserDatabase", MODE_PRIVATE);
         sharedPreferencesEditor = sharedPreferences.edit();
 
         if (sharedPreferences != null) {
-            String savedUsername = sharedPreferences.getString("Username", "");
-            String savedPassword = sharedPreferences.getString("Password", "");
 
-            RegistrationActivity.user = new User(savedUsername, savedPassword);
+            Map<String, ?> preferencesMap = sharedPreferences.getAll();
+
+            if (preferencesMap.size() != 0) {
+                user.loadUser(preferencesMap);
+            }
+
+            String savedUsername = sharedPreferences.getString("LastSavedUsername", "");
+            String savedPassword = sharedPreferences.getString("LastSavedPassword", "");
 
             if (sharedPreferences.getBoolean("RememberMeCheckbox", false)) {
                 username.setText(savedUsername);
@@ -76,10 +87,16 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                 }
             } if (isValid){
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
                 Toast.makeText(this, "Successfully logged-in!",
                         Toast.LENGTH_LONG).show();
+
+                sharedPreferencesEditor.putString("LastSavedUsername", inputName);
+                sharedPreferencesEditor.putString("LastSavedPassword", inputPassword);
+
+                sharedPreferencesEditor.apply();
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
             Utils.hideKeyboard(view);
         });
@@ -91,10 +108,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validate(String name, String password) {
-        if (RegistrationActivity.user != null) {
-            return name.equals(RegistrationActivity.user.getUsername()) &&
-                    password.equals(RegistrationActivity.user.getPassword());
-        }
-        return false;
+        return user.verifyUser(name, password);
     }
 }

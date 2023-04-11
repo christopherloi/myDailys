@@ -1,27 +1,34 @@
 package com.example.mydailys.login;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
-    private String username;
-    private String password;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    HashMap<String, String> userMapper = new HashMap<String, String>();
+
+    public void addUser(String username, String password) {
+        userMapper.put(username, password);
     }
 
-    public String getUsername() {
-        return username;
+    public boolean checkUsername(String username) {
+        return userMapper.containsKey(username);
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public boolean verifyUser(String username, String password) {
+        if (userMapper.containsKey(username)) {
+            if (password.equals(userMapper.get(username))) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void loadUser(Map<String, ?> preferencesMap) {
+        for(Map.Entry<String, ?> entries: preferencesMap.entrySet()) {
+            if (!entries.getKey().equals("RememberMeCheckbox")) {
+                userMapper.put(entries.getKey(), entries.getValue().toString());
+            }
+        }
     }
 }
