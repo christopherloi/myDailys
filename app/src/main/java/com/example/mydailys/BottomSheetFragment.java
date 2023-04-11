@@ -45,6 +45,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     Calendar calendar = Calendar.getInstance();
     private SharedViewModel sharedViewModel;
     private boolean isEdit;
+    private Priority priority;
 
     public BottomSheetFragment() {
     }
@@ -91,8 +92,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
 
         calendarButton.setOnClickListener(view12 -> {
             calendarGroup.setVisibility(
-                    calendarGroup.getVisibility() == View.GONE ?
-                            View.VISIBLE : View.GONE);
+                    calendarGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
             Utils.hideKeyboard(view12);
 
         });
@@ -102,16 +102,41 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
             dueDate = calendar.getTime();
         });
 
+        priorityButton.setOnClickListener(view13 -> {
+            Utils.hideKeyboard(view13);
+            priorityRadioGroup.setVisibility(
+                    priorityRadioGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+
+            priorityRadioGroup.setOnCheckedChangeListener((radioGroup, checkedId) -> {
+                if (priorityRadioGroup.getVisibility() == View.VISIBLE) {
+                    selectedButtonId = checkedId;
+                    selectedRadioButton = view.findViewById(selectedButtonId);
+                    if (selectedRadioButton.getId() == R.id.radioButton_high) {
+                        priority = Priority.HIGH;
+                    } else if (selectedRadioButton.getId() == R.id.radioButton_med) {
+                        priority = Priority.MEDIUM;
+                    } else if (selectedRadioButton.getId() == R.id.radioButton_low) {
+                        priority = Priority.LOW;
+                    } else {
+                        priority = Priority.LOW;
+                    }
+                } else {
+                    priority = Priority.LOW;
+                }
+            });
+        });
+
         saveButton.setOnClickListener(view1 -> {
             String task = enterTodo.getText().toString().trim();
-            if (!TextUtils.isEmpty(task) && dueDate != null) {
-                Task myTask = new Task(task, Priority.HIGH,
+
+            if (!TextUtils.isEmpty(task) && dueDate != null && priority != null) {
+                Task myTask = new Task(task, priority,
                         dueDate, Calendar.getInstance().getTime(),
                         false);
                 if (isEdit) {
                     Task updateTask = sharedViewModel.getSelectedItem().getValue();
                     updateTask.setTask(task);
-                    updateTask.setPriority(Priority.HIGH);
+                    updateTask.setPriority(priority);
                     updateTask.setDueDate(dueDate);
                     updateTask.setDateCreated(Calendar.getInstance().getTime());
                     TaskViewModel.updateTask(updateTask);
