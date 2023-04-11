@@ -14,14 +14,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.example.mydailys.model.Priority;
+import com.example.mydailys.model.SharedViewModel;
 import com.example.mydailys.model.Task;
 import com.example.mydailys.model.TaskViewModel;
+import com.example.mydailys.util.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import java.util.Calendar;
@@ -39,6 +43,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
     private Group calendarGroup;
     private Date dueDate;
     Calendar calendar = Calendar.getInstance();
+    private SharedViewModel sharedViewModel;
+    private boolean isEdit;
 
     public BottomSheetFragment() {
     }
@@ -65,13 +71,29 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (sharedViewModel.getSelectedItem().getValue() != null) {
+            isEdit = sharedViewModel.getIsEdit();
+
+            Task task = sharedViewModel.getSelectedItem().getValue();
+            enterTodo.setText(task.getTask());
+            Log.d("EDITFRAGMENT", "onResume: " + task.getTask());
+        }
+    }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity())
+                .get(SharedViewModel.class);
 
         calendarButton.setOnClickListener(view12 -> {
             calendarGroup.setVisibility(
-                    calendarGroup.getVisibility() == View.GONE ? View.VISIBLE : View.GONE
-            );
+                    calendarGroup.getVisibility() == View.GONE ?
+                            View.VISIBLE : View.GONE);
+            Utils.hideKeyboard(view12);
 
         });
         calendarView.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
@@ -86,8 +108,23 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Vi
                 Task myTask = new Task(task, Priority.HIGH,
                         dueDate, Calendar.getInstance().getTime(),
                         false);
-
-                TaskViewModel.insertTask(myTask);
+                if (isEdit) {
+                    Task updateTask = sharedViewModel.getSelectedItem().getValue();
+                    updateTask.setTask(task);
+                    updateTask.setPriority(Priority.HIGH);
+                    updateTask.setDueDate(dueDate);
+                    updateTask.setDateCreated(Calendar.getInstance().getTime());
+                    TaskViewModel.updateTask(updateTask);
+                    sharedViewModel.setIsEdit(false);
+                }else {
+                    TaskViewModel.insertTask(myTask);
+                }
+                enterTodo.setText("");
+                if (this.isVisible()) {
+                    this.dismiss();
+                }
+            }else {
+                Snackbar.make(saveButton, R.string.empty_field, Snackbar.LENGTH_LONG);
             }
         });
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.example.mydailys.adapter.OnTodoClickListener;
 import com.example.mydailys.adapter.RecyclerViewAdapter;
 import com.example.mydailys.model.Priority;
+import com.example.mydailys.model.SharedViewModel;
 import com.example.mydailys.model.Task;
 import com.example.mydailys.model.TaskViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     private RecyclerViewAdapter recyclerViewAdapter;
     private int counter;
     BottomSheetFragment bottomSheetFragment;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,9 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
         taskViewModel.getAllTasks().observe(this, tasks -> {
             recyclerViewAdapter = new RecyclerViewAdapter(tasks, this);
             recyclerView.setAdapter(recyclerViewAdapter);
-
         });
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -92,7 +95,18 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     }
 
     @Override
-    public void onTodoClick(int adapterPosition, Task task) {
-        Log.d("Click", "onTodoClick: " + task.getTask());
+    public void onTodoClick(Task task) {
+        // Log.d("Click", "onTodoClick: " + task.getTask());
+        sharedViewModel.selectItem(task);
+        sharedViewModel.setIsEdit(true);
+        showBottomSheetDialog();
+    }
+
+    @Override
+    public void onTodoRadioButtonClick(Task task) {
+        // Log.d("Click", "onTodoRadioButtonClick: " + task.getTask());
+        TaskViewModel.deleteTask(task);
+        // TODO: popup confirmation asking user to delete
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 }
