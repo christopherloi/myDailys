@@ -10,15 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyDailys">
         <activity
+            android:name=".LoginActivity"
+            android:label="Welcome!"
+            android:theme="@style/Theme.MyDailys.NoActionBar"
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MyDailys.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".AboutActivity"
