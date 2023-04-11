@@ -3,7 +3,7 @@
     <string name="save">Save</string>
     <string name="new_task">New Task</string>
     <string name="tasks">Tasks</string>
-    <string name="about_app_name">Todoist Clone App</string>
+    <string name="about_app_name">myDailys - Simple TODO App</string>
     <string name="about_app_author">Christopher Loi</string>
     <string name="about_app_version">Version 1.0</string>
     <string name="action_settings">About</string>

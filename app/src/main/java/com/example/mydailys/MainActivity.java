@@ -1,10 +1,10 @@
 package com.example.mydailys;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mydailys.adapter.OnTodoClickListener;
 import com.example.mydailys.adapter.RecyclerViewAdapter;
-import com.example.mydailys.model.Priority;
 import com.example.mydailys.model.SharedViewModel;
 import com.example.mydailys.model.Task;
 import com.example.mydailys.model.TaskViewModel;
@@ -17,8 +17,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -88,9 +86,10 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
