@@ -1,6 +1,7 @@
 package com.example.mydailys;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.mydailys.adapter.OnTodoClickListener;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
     private int counter;
     BottomSheetFragment bottomSheetFragment;
     private SharedViewModel sharedViewModel;
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements OnTodoClickListen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         counter = 0;
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         bottomSheetFragment = new BottomSheetFragment();
         ConstraintLayout constraintLayout = findViewById(R.id.bottomSheet);

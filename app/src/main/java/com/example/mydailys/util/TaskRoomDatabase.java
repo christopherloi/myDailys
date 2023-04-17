@@ -10,12 +10,14 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.mydailys.data.TaskDao;
+import com.example.mydailys.data.UserDao;
+import com.example.mydailys.login.User;
 import com.example.mydailys.model.Task;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class, User.class}, version = 1, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class TaskRoomDatabase extends RoomDatabase {
     public static final int NUMBER_OF_THREADS = 4;
@@ -34,6 +36,9 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
                         // invoke Dao, and write
                         TaskDao taskDao = INSTANCE.taskDao();
                         taskDao.deleteAllTasks(); // clean!
+
+                        UserDao userDao = INSTANCE.userDao();
+                        userDao.deleteAllUsers(); // clean!
 
                         // writing to our table
 
@@ -56,4 +61,5 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
     }
 
     public abstract TaskDao taskDao();
+    public abstract UserDao userDao();
 }

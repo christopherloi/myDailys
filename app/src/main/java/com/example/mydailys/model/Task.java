@@ -12,6 +12,9 @@ public class Task {
     @PrimaryKey(autoGenerate = true)
     public long taskId;
 
+    @ColumnInfo(name = "user_id_fk")
+    public long userIdFk;
+
     public String task;
 
     public Priority priority;

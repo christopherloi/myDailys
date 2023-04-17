@@ -42,4 +42,7 @@ public class myDailysRepository {
         TaskRoomDatabase.databaseWriterExecutor.execute(() -> taskDao.deleteTask(task));
     }
 
+    public LiveData<List<Task>> getTasksByUserId(long userId) {
+        return taskDao.getTasksByUserId(userId);
+    }
 }

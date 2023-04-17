@@ -34,4 +34,7 @@ public interface TaskDao {
 
     @Query("SELECT * FROM task_table WHERE task_table.task_id == :id")
     LiveData<Task> get(long id);
+
+    @Query("SELECT * FROM task_table WHERE user_id_fk = :userId")
+    LiveData<List<Task>> getTasksByUserId(long userId);
 }
